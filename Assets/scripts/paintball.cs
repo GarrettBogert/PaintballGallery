@@ -25,7 +25,8 @@ public class paintball : MonoBehaviour {
             {
                 if (hit.collider.gameObject.tag != "Projectile")
                 {
-                    this.transform.position = hit.point;
+                    //Todo, find way to send a magnitude to the "hit" object and send a force.
+                    this.transform.position = hit.point;                    
                     Splat(hit.point);
                 }
             }
@@ -45,17 +46,17 @@ public class paintball : MonoBehaviour {
         var oppositeDirection = -paintballDirection;
         //.002f is a good multiplier for backing up our paintball position away from the surface we hit.
         var pos = hit.point + (oppositeDirection * .002f);
-        //Todo: Remove this debug marker alltogether. It is simply an imaginary point from which the spray happens - just above the surface of where it had hit.
-        Instantiate(Resources.Load("debug marker"), pos, Quaternion.identity);
-        for (int i = 0; i < 50; i++)
+        //100 here is the amount of paint specks in the spray
+        for (int i = 0; i < 200; i++)
         {
             RaycastHit thisHit;           
-            var noise = GetRandomNoise(-20f, 20f);            
+            //This is how far the spray pattern can reach
+            var noise = GetRandomNoise(-40f, 40f);            
             Vector3 adjustedDir = noise + paintballDirection;
             var theRay = new Ray(pos, adjustedDir);
             if (Physics.Raycast(theRay, out thisHit, 5))
             {
-                Instantiate(Resources.Load("debug marker2"), thisHit.point, Quaternion.identity);
+                Instantiate(Resources.Load("splatter"), thisHit.point, Quaternion.identity);
             }
         }
 
